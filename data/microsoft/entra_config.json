@@ -1,2 +1,7 @@
 {
+  "secret_key": "Hs88Q~pEzG9uhvV6nzCmND5g9ufDX1cCYlzLUdaC",
+  "client_id": "cefd6ff7-fb53-4f4d-a15d-28fc2641475d",
+  "redirect_uri": "https://google.com/redirect",
+  "login_uri": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+  "scope": "https://graph.microsoft.com/email https://graph.microsoft.com/Mail.ReadWrite https://graph.microsoft.com/Mail.Send https://graph.microsoft.com/offline_access https://graph.microsoft.com/User.Read"
 }
