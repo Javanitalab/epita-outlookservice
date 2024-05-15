@@ -3,7 +3,7 @@ import json
 
 import requests
 
-from apps.outlook.models import OutlookAccount
+from apps.outlook.models import OutlookAccount, Email
 
 
 class OutlookAuth():
@@ -72,3 +72,24 @@ class OutlookAuth():
                 'Authorization': f'Bearer {outlook_account.access_token}'
             }
         )
+
+        for email in response.json():
+            body = email['body']['content']
+            preview = email['bodyPreview']
+            subject = email['subject']
+            id = email['id']
+            sender = email['from']['emailAddress']['address']
+            receiver = [email_address['address'] for email_address in email['toRecipients']]
+            cc = [email_address['address'] for email_address in email['ccRecipients']]
+            bcc = [email_address['address'] for email_address in email['bccRecipients']]
+
+            Email.objects.create(
+                outlook_id=id,
+                preview=preview,
+                subject=subject,
+                body=body,
+                sender=sender,
+                receiver=receiver,
+                cc=cc,
+                bcc=bcc,
+            )

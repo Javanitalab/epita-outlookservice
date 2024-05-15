@@ -12,8 +12,9 @@ class OutlookAccount(models.Model):
 
 
 class Email(models.Model):
+    outlook_id = models.CharField(max_length=256, null=True)
     sender = models.CharField(max_length=64, null=True)
-    receiver = models.CharField(max_length=64, null=True)
+    receiver = ArrayField(models.CharField(max_length=128))
     cc = ArrayField(models.CharField(max_length=128))
     bcc = ArrayField(models.CharField(max_length=128))
     subject = models.CharField(max_length=64, null=True)
