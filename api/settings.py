@@ -80,8 +80,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'outlookservice',  # Replace with your database name
+        'USER': 'postgres',   # Replace with your database username
+        'PASSWORD': 'postgres',  # Replace with your database password
+        'HOST': 'localhost',   # Set to your database host, usually 'localhost'
+        'PORT': '5432',        # Set to your database port, usually '5432'
     }
 }
 
