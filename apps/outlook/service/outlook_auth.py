@@ -44,8 +44,8 @@ class OutlookAuth():
 
         if response.status_code != 200:
             raise Exception(response.text)
-        access_token = response.json(['access_token'])
-        refresh_token = response.json(['refresh_token'])
+        access_token = response.json()['access_token']
+        refresh_token = response.json()['refresh_token']
 
         return access_token, refresh_token
 
