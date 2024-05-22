@@ -58,9 +58,11 @@ class OutlookAuth():
         )
 
         email = profile_response.json()['emails'][0]['address']
-        account = OutlookAccount.objects.create(access_token=access_token, refresh_token=refresh_token,
-                                                email_address=email)
+        account, is_created = OutlookAccount.objects.get_or_create(email_address=email)
 
+        account.access_token = access_token
+        account.refresh_token = refresh_token
+        account.save()
         return account
 
     def get_list_of_messages(self, outlook_account: OutlookAccount, query_param: dict):

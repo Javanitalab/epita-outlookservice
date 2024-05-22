@@ -25,7 +25,8 @@ class OutlookAuthViewSet(ViewSet):
 
         if code is None:
             return Response(status=400, data={'message': 'code is missing in query params'})
-
-        url = OutlookAuth().send_authorization_token_request(code, is_token_expired=False)
+        outlook_account = OutlookAuth()
+        access_token,refresh_token = outlook_account.send_authorization_token_request(code, is_token_expired=False)
+        outlook_account.create_outlook_account(access_token,refresh_token)
 
         return Response(status=200)

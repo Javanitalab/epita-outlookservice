@@ -7,8 +7,8 @@ from django.db import models
 
 class OutlookAccount(models.Model):
     email_address = models.CharField(max_length=128, null=True, blank=True)
-    access_token = models.CharField(max_length=2048, null=True, blank=True)
-    refresh_token = models.CharField(max_length=2048, null=True, blank=True)
+    access_token = models.TextField(null=True, blank=True)
+    refresh_token = models.TextField(null=True, blank=True)
 
 
 class Email(models.Model):
