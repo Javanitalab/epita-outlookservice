@@ -17,10 +17,11 @@ Including another URLconf
 from django.urls import re_path, include
 from rest_framework.routers import DefaultRouter
 
-from apps.outlook.views import OutlookAuthViewSet
+from apps.outlook.views import OutlookAuthViewSet, OutlookMessageViewSet
 
 router = DefaultRouter()
 router.register(r'outlook-auth', OutlookAuthViewSet, basename='outlook-auth')
+router.register(r'outlook-message', OutlookMessageViewSet, basename='outlook-message')
 
 urlpatterns = [
     re_path(r'^', include(router.urls)),
