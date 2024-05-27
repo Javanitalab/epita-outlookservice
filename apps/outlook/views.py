@@ -50,7 +50,7 @@ class OutlookMessageViewSet(ViewSet):
 
         return Response(status=200, data=EmailSerializer(instance=emails, many=True).data)
 
-    @action(methods=['get'], detail=False)
+    @action(methods=['post'], detail=False)
     def send_message(self, request, *args):
         outlook_account_id = self.request.data.get('outlook_account_id', None)
         subject = self.request.data.get('subject', None)
