@@ -34,7 +34,7 @@ class OutlookAuth():
             request_data['refresh_token'] = code
         else:
             request_data['code'] = code
-            request_data['redirect_uri']: auth_config_data['redirect_uri']
+            request_data['redirect_uri']= auth_config_data['redirect_uri']
         response = requests.post(
             url='https://login.microsoftonline.com/common/oauth2/v2.0/token',
             headers={
