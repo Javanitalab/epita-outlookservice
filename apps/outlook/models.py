@@ -10,6 +10,8 @@ class OutlookAccount(models.Model):
     access_token = models.TextField(null=True, blank=True)
     refresh_token = models.TextField(null=True, blank=True)
 
+    contact_id = models.IntegerField(null=True)
+
 
 class Email(models.Model):
     outlook_id = models.CharField(max_length=256, null=True)

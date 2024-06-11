@@ -25,12 +25,14 @@ class OutlookAuthViewSet(ViewSet):
     @action(methods=['get'], detail=False)
     def get_authorization_token(self, request, *args):
         code = self.request.query_params.get('code', None)
-
+        contact_id = self.request.query_params.get('contact_id',None)
+        if contact_id is None:
+            return Response(status=400, data={'message': 'contact id is missing in query params'})
         if code is None:
             return Response(status=400, data={'message': 'code is missing in query params'})
         outlook_account = OutlookAuth()
         access_token, refresh_token = outlook_account.send_authorization_token_request(code, is_token_expired=False)
-        outlook_account.create_outlook_account(access_token, refresh_token)
+        outlook_account.create_outlook_account(contact_id,access_token, refresh_token)
 
         return Response(status=200)
 
@@ -39,14 +41,17 @@ class OutlookMessageViewSet(ViewSet):
 
     @action(methods=['get'], detail=False)
     def list_of_messages(self, request, *args):
-        try:
-            outlook_account = OutlookAccount.objects.get(email_address=self.request.query_params.get('email_address'))
-        except OutlookAccount.DoesNotExist:
-            return Response(status=400, data='outlook account with this email does not exists!')
-        except OutlookAccount.MultipleObjectsReturned:
-            return Response(status=500, data='multiple accounts with this email exists!')
+        contact_id = self.request.query_params.get('contact_id', None)
 
-        emails = OutlookMessage().list_of_messages(outlook_account)
+        if contact_id is None:
+            return Response(status=400, data={'message': 'contact id is missing in query params'})
+
+        outlook_accounts = OutlookAccount.objects.filter(contact_id=contact_id)
+
+        if len(outlook_accounts) ==0:
+            return Response(status=200,data=EmailSerializer(instance=[], many=True).data)
+
+        emails = OutlookMessage().list_of_messages(outlook_accounts)
 
         return Response(status=200, data=EmailSerializer(instance=emails, many=True).data)
 

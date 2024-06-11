@@ -34,7 +34,7 @@ class OutlookAuth():
             request_data['refresh_token'] = code
         else:
             request_data['code'] = code
-            request_data['redirect_uri']= auth_config_data['redirect_uri']
+            request_data['redirect_uri'] = auth_config_data['redirect_uri']
         response = requests.post(
             url='https://login.microsoftonline.com/common/oauth2/v2.0/token',
             headers={
@@ -53,7 +53,7 @@ class OutlookAuth():
 
         return access_token, refresh_token
 
-    def create_outlook_account(self, access_token: str, refresh_token: str):
+    def create_outlook_account(self, contact_id: str, access_token: str, refresh_token: str):
         profile_response = requests.get(
             url='https://graph.microsoft.com/beta/me/profile',
             headers={
@@ -62,7 +62,7 @@ class OutlookAuth():
         )
 
         email = profile_response.json()['emails'][0]['address']
-        account, is_created = OutlookAccount.objects.get_or_create(email_address=email)
+        account, is_created = OutlookAccount.objects.get_or_create(email_address=email,contact_id=contact_id)
 
         account.access_token = access_token
         account.refresh_token = refresh_token

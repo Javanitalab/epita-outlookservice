@@ -1,4 +1,3 @@
-import os
 import json
 
 import requests
@@ -9,7 +8,13 @@ from apps.outlook.service.outlook_auth import OutlookAuth
 
 class OutlookMessage():
 
-    def list_of_messages(self, outlook_account: OutlookAccount):
+    def merge_messages(self,outlook_accounts):
+        emails = []
+        for outlook_account in outlook_accounts:
+            emails.extend(self.list_of_messages(outlook_account))
+        return emails
+
+    def list_of_messages(self, outlook_account: OutlookAccount,avoid_stack_overflow=False):
         emails = []
         messages_response = requests.get(
             url='https://graph.microsoft.com/v1.0/me/messages',
@@ -18,9 +23,15 @@ class OutlookMessage():
             }
         )
 
-        if messages_response.status_code == 401:
-            # TODO send refresh token request and update the tokens
-            pass
+        if messages_response.status_code == 401 and not avoid_stack_overflow:
+            access_token, refresh_token = OutlookAuth().send_authorization_token_request(outlook_account.refresh_token,
+                                                                                         is_token_expired=True)
+            outlook_account.access_token = access_token
+            outlook_account.refresh_token = refresh_token
+            outlook_account.save()
+            self.list_of_messages(outlook_account, avoid_stack_overflow=True)
+        else:
+            raise Exception(messages_response.text)
 
         for email in messages_response.json()['value']:
             body = email['body']['content']
